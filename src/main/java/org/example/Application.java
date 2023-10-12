@@ -77,5 +77,13 @@ public class Application {
         });
         //Esercizio 2
         System.out.println("--------Esercizio 2--------");
+        Map<Customer, Double> totalCartValueClient = new HashMap<>();
+        listOfOrder.forEach(order -> {
+            Customer keyCustomer = order.getCustomer();
+            Double sumOfPrice = order.getProducts().stream().mapToDouble(Product::getPrice).sum();
+            totalCartValueClient.merge(keyCustomer, sumOfPrice, Double::sum);
+        });
+        
+        totalCartValueClient.forEach(((customer, aDouble) -> System.out.println("Cliente: " + customer + " totale carrello: " + aDouble + "€")));
     }
 }
