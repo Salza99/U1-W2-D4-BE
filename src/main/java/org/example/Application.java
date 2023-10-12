@@ -6,6 +6,7 @@ import Entities.Product;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class Application {
@@ -83,7 +84,22 @@ public class Application {
             Double sumOfPrice = order.getProducts().stream().mapToDouble(Product::getPrice).sum();
             totalCartValueClient.merge(keyCustomer, sumOfPrice, Double::sum);
         });
-        
+
         totalCartValueClient.forEach(((customer, aDouble) -> System.out.println("Cliente: " + customer + " totale carrello: " + aDouble + "€")));
+        //Esercizio 3
+        System.out.println("--------Esercizio 3--------");
+        Optional<Product> expensiveProduct = listOfBoysA.stream().max(Comparator.comparing(Product::getPrice));
+        if (expensiveProduct.isPresent()) {
+            System.out.println("il prodotto più costoso è: " + expensiveProduct.get().getName() + " con un prezzo di: " + expensiveProduct.get().getPrice() + "€");
+        }
+        //Esercizio 4
+        System.out.println("--------Esercizio 4--------");
+        AtomicReference<Double> average = new AtomicReference<>(0.0);
+        listOfOrder.stream().forEach(order -> {
+            average.updateAndGet(v -> v + order.getProducts().stream().mapToDouble(Product::getPrice).sum());
+
+        });
+
+        System.out.println("La media è: " + average.get() / listOfOrder.size());
     }
 }
