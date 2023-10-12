@@ -6,6 +6,7 @@ import Entities.Product;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Application {
 
@@ -69,6 +70,12 @@ public class Application {
         listOfOrder.add(orderF);
         //Esercizio 1
         System.out.println("--------Esercizio 1--------");
-        
+        Map<Customer, List<Order>> ordersByClient = listOfOrder.stream().collect(Collectors.groupingBy(Order::getCustomer));
+        ordersByClient.forEach((customer, orderList) -> {
+            System.out.println("Cliente: " + customer);
+            System.out.println("Ordini cliente " + customer + " :" + orderList);
+        });
+        //Esercizio 2
+        System.out.println("--------Esercizio 2--------");
     }
 }
