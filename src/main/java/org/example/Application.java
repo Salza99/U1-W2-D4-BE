@@ -7,6 +7,7 @@ import Entities.Product;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Application {
@@ -53,7 +54,8 @@ public class Application {
         //boys
         List<Product> listOfBoysA = new ArrayList<>(List.of(boysA,boysC));
         List<Product> listOfBoysB = new ArrayList<>(List.of(boysE,boysA,boysD));
-
+        //Mix
+        List<Product> listMixA = new ArrayList<>(List.of(bookA, boysB, babyC, bookE, bookF, boysB, bookG, babyB));
         //ordini
         Order orderA = new Order(LocalDate.of(2020,10,8),a,listOfBooksA);
         Order orderB = new Order(LocalDate.of(2021,2,13),a,listOfBabyB);
@@ -101,5 +103,19 @@ public class Application {
         });
 
         System.out.println("La media è: " + average.get() / listOfOrder.size());
+        //Esercizio 5
+        System.out.println("--------Esercizio 5--------");
+        Map<String, Double> totalImportByCategory = new HashMap<>();
+        Map<String, List<Product>> productByCategory = listMixA.stream().collect(Collectors.groupingBy(Product::getCategory));
+        productByCategory.forEach((category, product) -> {
+           Double sumOfImport = product.stream().mapToDouble(Product::getPrice).sum();
+           totalImportByCategory.merge(category, sumOfImport, Double::sum );
+       });
+        totalImportByCategory.forEach((category, totalPrice) -> {
+            System.out.println("il prezzo totale per la categoria: " + category + " è di: " + Float.parseFloat(totalPrice.toString())   + "€");
+        });
+
+
     }
+
 }
